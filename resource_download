@@ -14,8 +14,8 @@ import shutil
 import click
 from xdg import XDG_CONFIG_HOME, XDG_CACHE_HOME
 
-import nlgeval
-import nlgeval.utils
+import nlgeval.nlgeval
+import nlgeval.nlgeval.utils
 
 CODE_PATH = nlgeval.__path__[0]
 
