@@ -12,12 +12,15 @@ import time
 from zipfile import ZipFile
 import shutil
 import click
-from xdg import XDG_CONFIG_HOME, XDG_CACHE_HOME
 
-import nlgeval.nlgeval
-import nlgeval.nlgeval.utils
+from xdg import XDG_CONFIG_HOME, XDG_CACHE_HOME
+print(f'---{XDG_CONFIG_HOME}---{XDG_CACHE_HOME}')
+
+# import nlgeval.nlgeval
+import nlgeval.utils
 
 CODE_PATH = nlgeval.__path__[0]
+print(f'----------CODE_PATH:{CODE_PATH}')
 
 
 def _download_file(d):
@@ -71,8 +74,10 @@ def setup(data_path):
     If the data_path argument is provided, install to the given location.
     Otherwise, your cache directory is used (usually ~/.cache/nlgeval).
     """
-    from nltk.downloader import download
-    download('punkt')
+
+    from nltk import download
+    # download('punkt')
+    # nltk.download('punkt')
 
     from multiprocessing import Pool
 
@@ -90,12 +95,14 @@ def setup(data_path):
 
     if sys.version_info[0] == 2:
         downloads.append(dict(
-            url='https://raw.githubusercontent.com/manasRK/glove-gensim/42ce46f00e83d3afa028fb6bf17ed3c90ca65fcc/glove2word2vec.py',
+            # url='https://raw.githubusercontent.com/manasRK/glove-gensim/42ce46f00e83d3afa028fb6bf17ed3c90ca65fcc/glove2word2vec.py',
+            url='https://raw.fgit.cf/manasRK/glove-gensim/42ce46f00e83d3afa028fb6bf17ed3c90ca65fcc/glove2word2vec.py',
             target_dir=os.path.join(CODE_PATH, 'word2vec')
         ))
     else:
         downloads.append(dict(
-            url='https://raw.githubusercontent.com/robmsmt/glove-gensim/4c2224bccd61627b76c50a5e1d6afd1c82699d22/glove2word2vec.py',
+            # url='https://raw.githubusercontent.com/robmsmt/glove-gensim/4c2224bccd61627b76c50a5e1d6afd1c82699d22/glove2word2vec.py',
+            url='https://raw.fgit.cf/robmsmt/glove-gensim/4c2224bccd61627b76c50a5e1d6afd1c82699d22/glove2word2vec.py',
             target_dir=os.path.join(CODE_PATH, 'word2vec')
         ))
 
@@ -114,7 +121,7 @@ def setup(data_path):
     downloads.append(dict(
             url='http://nlp.stanford.edu/software/stanford-corenlp-full-2015-12-09.zip',
             target_dir=CODE_PATH
-    ))   
+    ))
     downloads.append(dict(
         url='http://www.cs.toronto.edu/~rkiros/models/utable.npy',
         target_dir=data_path
@@ -142,7 +149,8 @@ def setup(data_path):
 
     # multi-bleu.perl
     downloads.append(dict(
-        url='https://raw.githubusercontent.com/moses-smt/mosesdecoder/b199e654df2a26ea58f234cbb642e89d9c1f269d/scripts/generic/multi-bleu.perl',
+        # url='https://raw.githubusercontent.com/moses-smt/mosesdecoder/b199e654df2a26ea58f234cbb642e89d9c1f269d/scripts/generic/multi-bleu.perl',
+        url='https://raw.fgit.cf/moses-smt/mosesdecoder/b199e654df2a26ea58f234cbb642e89d9c1f269d/scripts/generic/multi-bleu.perl',
         target_dir=os.path.join(CODE_PATH, 'multibleu')
     ))
 
@@ -151,10 +159,14 @@ def setup(data_path):
             os.makedirs(target_dir)
 
     # Limit the number of threads so that we don't download too much from the same source concurrently.
-    pool = Pool(min(4, len(downloads)))
-    pool.map(_download_file, downloads)
-    pool.close()
-    pool.join()
+    # pool = Pool(min(4, len(downloads)))
+    # pool.map(_download_file, downloads)
+    # pool.close()
+    # pool.join()
+    # 不使用多线程方法
+    for d in downloads:
+        print('====================')
+        _download_file(d)
 
     if setup_glove:
         from nlgeval.word2vec.generate_w2v_files import generate
@@ -195,13 +207,13 @@ def setup(data_path):
         f.write(json.dumps(rc))
 
 
-@click.command()
-@click.option('--references', type=click.Path(exists=True), multiple=True, required=True, help='Path of the reference file. This option can be provided multiple times for multiple reference files.')
-@click.option('--hypothesis', type=click.Path(exists=True), required=True, help='Path of the hypothesis file.')
-@click.option('--no-overlap', is_flag=True, help='Flag. If provided, word overlap based metrics will not be computed.')
-@click.option('--no-skipthoughts', is_flag=True, help='Flag. If provided, skip-thought cosine similarity will not be computed.')
-@click.option('--no-glove', is_flag=True, help='Flag. If provided, other word embedding based metrics will not be computed.')
-def compute_metrics(hypothesis, references, no_overlap, no_skipthoughts, no_glove):
+# @click.command()
+# @click.option('--references', type=click.Path(exists=True), multiple=True, required=True, help='Path of the reference file. This option can be provided multiple times for multiple reference files.')
+# @click.option('--hypothesis', type=click.Path(exists=True), required=True, help='Path of the hypothesis file.')
+# @click.option('--no-overlap', is_flag=True, help='Flag. If provided, word overlap based metrics will not be computed.')
+# @click.option('--no-skipthoughts', is_flag=True, help='Flag. If provided, skip-thought cosine similarity will not be computed.')
+# @click.option('--no-glove', is_flag=True, help='Flag. If provided, other word embedding based metrics will not be computed.')
+# def compute_metrics(hypothesis, references, no_overlap, no_skipthoughts, no_glove):
     """
     Compute nlg-eval metrics.
 
@@ -211,18 +223,15 @@ def compute_metrics(hypothesis, references, no_overlap, no_skipthoughts, no_glov
 
     Note that nlg-eval also features an API, which may be easier to use.
     """
-    try:
-        data_dir = nlgeval.utils.get_data_dir()
-    except nlgeval.utils.InvalidDataDirException:
-        sys.exit(1)
-    click.secho("Using data from {}".format(data_dir), fg='green')
-    click.secho("In case of broken downloads, remove the directory and run setup again.", fg='green')
-    nlgeval.compute_metrics(hypothesis, references, no_overlap, no_skipthoughts, no_glove)
+    # try:
+    #     data_dir = nlgeval.utils.get_data_dir()
+    # except nlgeval.utils.InvalidDataDirException:
+    #     sys.exit(1)
+    # click.secho("Using data from {}".format(data_dir), fg='green')
+    # click.secho("In case of broken downloads, remove the directory and run setup again.", fg='green')
+    # nlgeval.compute_metrics(hypothesis, references, no_overlap, no_skipthoughts, no_glove)
 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1 and sys.argv[1] == '--setup':
-        del sys.argv[0]
-        setup()
-    else:
-        compute_metrics()
+    setup()
+

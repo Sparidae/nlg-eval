@@ -14,8 +14,15 @@ def test_oo_api():
     nlge = NLGEval()
 
     res = nlge.compute_individual_metrics([ref1[0]] + [ref2[0]], hyp[0])
+    print(res)
     res = nlge.compute_individual_metrics([ref1[1]] + [ref2[1]], hyp[1])
+    print(res)
 
     hyp_list = hyp # 字符串列表不包含空格
     ref_list = [ref1, ref2]
     res = nlge.compute_metrics(ref_list, hyp_list)
+    print(res)
+
+
+if __name__ == '__main__':
+    test_oo_api()
