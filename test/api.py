@@ -16,6 +16,6 @@ def test_oo_api():
     res = nlge.compute_individual_metrics([ref1[0]] + [ref2[0]], hyp[0])
     res = nlge.compute_individual_metrics([ref1[1]] + [ref2[1]], hyp[1])
 
-    hyp_list = hyp
+    hyp_list = hyp # 字符串列表不包含空格
     ref_list = [ref1, ref2]
     res = nlge.compute_metrics(ref_list, hyp_list)
