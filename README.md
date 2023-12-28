@@ -1,20 +1,20 @@
-[![Build Status](https://travis-ci.org/Maluuba/nlg-eval.svg?branch=master)](https://travis-ci.org/Maluuba/nlg-eval)
+# nlg-eval
+Evaluation code for various unsupervised automated metrics for NLG (Natural Language Generation).
+It takes as input a hypothesis file, and one or more references files and outputs values of metrics.
+Rows across these files should correspond to the same example.
 
-# Modify
+
+## Modify
 
 可以作为子模块导入，导入方法
 
 ```bash
 git submodule add git@github.com:Sparidae/nlg-eval.git nlgeval
-
 # git submodule update --remote nlgeval
 ```
 
+正常导入函数下载资源，但是不能作为命令行使用
 
-# nlg-eval
-Evaluation code for various unsupervised automated metrics for NLG (Natural Language Generation).
-It takes as input a hypothesis file, and one or more references files and outputs values of metrics.
-Rows across these files should correspond to the same example.
 
 ## Metrics ##
 - BLEU
@@ -31,32 +31,19 @@ Rows across these files should correspond to the same example.
 
 Install Java 1.8.0 (or higher).
 
-Install the Python dependencies, run:
-```bash
-pip install git+https://github.com/Maluuba/nlg-eval.git@master
-```
 
 If you are using macOS High Sierra or higher, then run this to allow multithreading:
 ```bash
 export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
 ```
 
-Simple setup (download required data (e.g. models, embeddings) and external code files), run:
-```bash
-nlg-eval --setup
-```
-
-If you're setting this up from the source code or you're on Windows and not using a Bash terminal, then you might get errors about `nlg-eval` not being found.
-You will need to find the `nlg-eval` script.
-See [here](https://github.com/Maluuba/nlg-eval/issues/61) for details.
 
 ### Custom Setup ###
+
 ```bash
-# If you don't like the default path (~/.cache/nlgeval) for the downloaded data,
-# then specify a path where you want the files to be downloaded.
-# The value for the data path is stored in ~/.config/nlgeval/rc.json and can be overwritten by
-# setting the NLGEVAL_DATA environment variable.
-nlg-eval --setup ${data_path}
+# 下载相关文件
+# nlg-eval --setup ${data_path}
+python3 resource_download.py
 ```
 
 ### Validate the Setup (Optional) ###
@@ -102,26 +89,11 @@ d58740d46cba28417cbc026af577f530c603d81ac9de43ffd098f207c7dc4411 *uni_skip.npz.p
 790951d4b08e843e3bca0563570f4134ffd17b6bd4ab8d237d2e5ae15e4febb3 *utable.npy
 ```
 
-If you're ensure that the setup was successful, you can run the tests:
-```bash
-pip install pytest
-pytest
-```
-
-It might take a few minutes and you might see warnings but they should pass.
-
 ## Usage ##
+
 Once setup has completed, the metrics can be evaluated with a Python API or in the command line.
 
 Examples of the Python API can be found in [test_nlgeval.py](nlgeval/tests/test_nlgeval.py).
-
-### Standalone ###
-
-    nlg-eval --hypothesis=examples/hyp.txt --references=examples/ref1.txt --references=examples/ref2.txt
-
-where each line in the hypothesis file is a generated sentence and the corresponding
-lines across the reference files are ground truth reference sentences for the
-corresponding hypothesis.
 
 ### functional API: for the entire corpus ###
 
