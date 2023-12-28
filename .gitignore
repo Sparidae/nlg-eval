@@ -6,6 +6,11 @@ pycocoevalcap/tokenizer/tmp*
 delete.py
 nlg_eval.egg-info/
 
+stanford-corenlp-full-2015-12-09/**
+*stanford-corenlp*
+pycocoevalcap/spice/tmp/**
+pycocoevalcap/spice/cache/**
+
 bi_skip.npz
 bi_skip.npz.pkl
 dictionary.txt

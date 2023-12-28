@@ -118,10 +118,10 @@ def setup(data_path):
         url='http://www.cs.toronto.edu/~rkiros/models/dictionary.txt',
         target_dir=data_path
     ))
-    downloads.append(dict(
-            url='http://nlp.stanford.edu/software/stanford-corenlp-full-2015-12-09.zip',
-            target_dir=CODE_PATH
-    ))
+    # downloads.append(dict(
+    #         url='http://nlp.stanford.edu/software/stanford-corenlp-full-2015-12-09.zip',
+    #         target_dir=CODE_PATH
+    # ))
     downloads.append(dict(
         url='http://www.cs.toronto.edu/~rkiros/models/utable.npy',
         target_dir=data_path
@@ -181,13 +181,13 @@ def setup(data_path):
             if os.path.exists(p):
                 os.remove(p)
 
-    with ZipFile(os.path.join(CODE_PATH, 'stanford-corenlp-full-2015-12-09.zip')) as z:
-        z.extractall(CODE_PATH)
-    temp_path = os.path.join(CODE_PATH,'stanford-corenlp-full-2015-12-09')
-    os.makedirs(os.path.join(CODE_PATH,'pycocoevalcap/spice/lib/'), exist_ok=True)
-    shutil.move(os.path.join(temp_path,'stanford-corenlp-3.6.0.jar'), os.path.join(CODE_PATH,'pycocoevalcap/spice/lib/stanford-corenlp-3.6.0.jar'))
-    shutil.move(os.path.join(temp_path,'stanford-corenlp-3.6.0-models.jar'),os.path.join(CODE_PATH,'pycocoevalcap/spice/lib/stanford-corenlp-3.6.0-models.jar')) 
-    os.remove(os.path.join(CODE_PATH, 'stanford-corenlp-full-2015-12-09.zip'))
+    # with ZipFile(os.path.join(CODE_PATH, 'stanford-corenlp-full-2015-12-09.zip')) as z:
+    #     z.extractall(CODE_PATH)
+    # temp_path = os.path.join(CODE_PATH,'stanford-corenlp-full-2015-12-09')
+    # os.makedirs(os.path.join(CODE_PATH,'pycocoevalcap/spice/lib/'), exist_ok=True)
+    # shutil.move(os.path.join(temp_path,'stanford-corenlp-3.6.0.jar'), os.path.join(CODE_PATH,'pycocoevalcap/spice/lib/stanford-corenlp-3.6.0.jar'))
+    # shutil.move(os.path.join(temp_path,'stanford-corenlp-3.6.0-models.jar'),os.path.join(CODE_PATH,'pycocoevalcap/spice/lib/stanford-corenlp-3.6.0-models.jar'))
+    # os.remove(os.path.join(CODE_PATH, 'stanford-corenlp-full-2015-12-09.zip'))
 
     path = os.path.join(CODE_PATH, 'multibleu/multi-bleu.perl')
     stats = os.stat(path)
